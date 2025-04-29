@@ -12,16 +12,9 @@ public class ZombieLand extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Canvas tela = new Canvas(400, 250);
-		GraphicsContext gc = tela.getGraphicsContext2D();
-
-		gc.setStroke(Color.RED);
-		gc.strokeLine(10, 16, 10, 5);
+		GridPane principale = new GridPane(50,50);
 		
-		GridPane pannello = new GridPane();
-		pannello.add(tela, 0, 0);
-		
-		Scene scene = new Scene(pannello);
+		Scene scene = new Scene(principale);
 	    primaryStage.setTitle("Zombie Land");
 	    primaryStage.setScene(scene);
 	    primaryStage.show();
