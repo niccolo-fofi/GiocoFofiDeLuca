@@ -1,80 +1,99 @@
 package it.edu.iisgubbio.giocoFofiDeLuca;
 
-import java.awt.event.KeyAdapter;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
-public class Sopravissuto extends PrimaMappa{
+public class Sopravissuto {
 	
-	//dichiaro le variabili "x", "y", "velocità" che serve per far
-	// muovere il sopravvissuto.
+	/**
+	 * dichiaro le variabili "x", "y", "velocità" che serve per far
+	 * muovere il sopravvissuto.
+	 */
 	
-	private int velocità = 10;
-	private int x;
-	private int y;
+	private Rectangle rettangolo;
+	final private double velocità = 10;
+	private double x;
+	private double y;
 
+
+
+	/**
+	 * Qui mi occupo del movimento del sopravvissuto.
+	 * @param x
+	 * @param y
+	 */
 	
+	 public Sopravissuto(int x, int y) {
+	        this.x = x;
+	        this.y = y;
+	        // Crea un rettangolo per rappresentare il personaggio
+	        Rectangle rettangolo = new Rectangle(x, y, 30, 30);
+	        rettangolo.setFill(Color.BLUE);
+	 }
 	
-	//Qui mi occupo del movimento del sopravvissuto.
+	public Rectangle getRettangolo() {
+        return rettangolo;
+    }
 	
-	public void MovimentoPersonaggio() {
-		
-		addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent e) {
-				int keyCode = e.getKeyCode();
-				
-				if (keyCode == KeyEvent.VK_DOWN) {
-					y = velocità;  // Muovi verso il basso	
-				}
-				
-				if (keyCode == KeyEvent.VK_UP) {
-					y = velocità;  // Muovi verso l'alto
-				}
-				
-				if (keyCode == KeyEvent.VK_LEFT) {
-		    		x = velocità;  // Muovi verso la sinistra		
-		    	}
-				
-				if (keyCode == KeyEvent.VK_RIGHT) {
-		    		x = velocità;  // Muovi verso la destra		
-		    	}
-			}
-		}
+	public void muoviSu(){
+		y += velocità;
+		aggiornaPosizione();
 	}
 	
+	public void muoviGiu(){
+		y -= velocità;
+		aggiornaPosizione();
+			
+	}
 	
-	   
+	public void muoviDestra(){
+		x += velocità;
+		aggiornaPosizione();
+		
+	}
+	
+	public void muoviSinistra(){
+		
+		x -= velocità;
+		aggiornaPosizione();
+	}
+	
+	 private void aggiornaPosizione() {
+			rettangolo.setX(x);
+	        rettangolo.setY(y);
+	 }
     
-	public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-	
-	
+    /**
+     * Nella funzione prendiDanno descrivo che quando il sopravvissuto viene
+     * in contatto con lo zombie prende danno 
+     */
     
-    //Nella funzione prendiDanno descrivo che quando il sopravvissuto viene
-    //in contatto con lo zombie prende danno 
     
     public boolean prendiDanno() {
 		
     }
     
-    //Nella funzione cacciaFantasmi descrivo che quando il sopravvissuto prende
-    //il punto rosa, puo cacciare gli zombie
+    /**
+     * Nella funzione cacciaFantasmi descrivo che quando il sopravvissuto prende
+     * il punto rosa, puo cacciare gli zombie
+     */
+    
     
     public boolean cacciaFantasmi() {
 		
 	}
 	
- 	//Nella funzione prendiDanno descrivo che quando il sopravvissuto viene
-    //in contatto con lo zombie prende danno 
+ 	/**
+ 	 * Nella funzione prendiDanno descrivo che quando il sopravvissuto viene
+ 	 *  in contatto con lo zombie prende danno 
+ 	 */
+   
     
-	
-
+    
+    public boolean collisione() {
+    	
+    	
 		
-	
-	
-	
+   	}
+
 }
