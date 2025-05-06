@@ -17,10 +17,12 @@ public class PrimaMappa extends Application {
 	Image muroVerticale = new Image(getClass().getResourceAsStream("verticale.png"));
 	Image muroOrizzontale = new Image(getClass().getResourceAsStream("orizzontale.png"));
 	Image puntino = new Image(getClass().getResourceAsStream("puntino.png"));
-	Image angoloDestro = new Image(getClass().getResourceAsStream("AngoloDestro.png"));
-	Image angoloSinistro= new Image(getClass().getResourceAsStream("AngoloSinistro.png"));
+	Image spazio = new Image(getClass().getResourceAsStream("nero.jpg"));
+	Image angoloDestroAlto = new Image(getClass().getResourceAsStream("AngoloDestroAlto.png"));
+	Image angoloSinistroAlto= new Image(getClass().getResourceAsStream("AngoloSinistroAlto.png"));
+	Image angoloDestroBasso = new Image(getClass().getResourceAsStream("AngoloDestroBasso.png"));
+	Image angoloSinistroBasso= new Image(getClass().getResourceAsStream("AngoloSinistroBasso.png"));
 	Image angoloT = new Image(getClass().getResourceAsStream("AngoloT.png"));
-
 	int altezzaMappa = 20;
 	int larghezzaMappa = 50;
 
@@ -36,11 +38,13 @@ public class PrimaMappa extends Application {
 		primaryStage.show();
 
 		/*
-		 * leggo il file e lo metto dentro l'array
+		 * leggo dal file i caratteri e ad ogni
+		 * carattere associo un immagine che sarà
+		 * aggiunta alla GridPane
 		 */
 
 		try (
-				InputStream is = getClass().getResourceAsStream("posizioneMappa.txt");
+				InputStream is = getClass().getResourceAsStream("posizionePrimaMappa.txt");
 				InputStreamReader isr = new InputStreamReader(is);
 				BufferedReader lettore = new BufferedReader(isr);
 				) {
@@ -53,22 +57,35 @@ public class PrimaMappa extends Application {
 
 				for (int x = 0; x < caratteri.length; x++) {
 					Image img=null;
-					if (caratteri[x].equals("v")) {
+					if (caratteri[x].equals("s")) {
+						img = spazio;
 					} else {
-						if (caratteri[x].equals("mV")) {
+						if (caratteri[x].equals("v")) {
 							img = muroVerticale;
 						}else {
-							if (caratteri[x].equals("mO")) {
+							if (caratteri[x].equals("o")) {
 								img = muroOrizzontale;
 							}else {
 								if (caratteri[x].equals("p")) {
 									img = puntino;
 								}else {
-									if (caratteri[x].equals("aD")) {
-										img = angoloDestro;
+									if (caratteri[x].equals("aDA")) {
+										img = angoloDestroAlto;
 									}else {
-										if(caratteri[x].equals("aT")) {
-											img = angoloT;
+										if (caratteri[x].equals("aSA")) {
+											img = angoloSinistroAlto;
+										}else {
+											if(caratteri[x].equals("aDB")){
+												img = angoloDestroBasso;
+											}else {
+												if(caratteri[x].equals("aT")) {
+													img = angoloT;
+												}else {
+													if(caratteri[x].equals("aSB")){
+														img = angoloSinistroBasso;
+													}
+												}
+											}
 										}
 									}
 								}
