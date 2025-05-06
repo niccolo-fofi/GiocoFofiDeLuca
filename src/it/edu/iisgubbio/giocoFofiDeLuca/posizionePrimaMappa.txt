@@ -1,0 +1,8 @@
+aDA,o,o,o,o,o,o,o,o,o,o,aT,o,o,o,o,o,o,o,o,o,o,aSA
+v,p,p,p,p,p,p,p,p,p,p,v,p,p,p,p,p,p,p,p,p,p,v
+v,p,aDA,o,aSA,p,aDA,o,o,aSA,p,v,p,aDA,o,o,aSA,p,aDA,o,aSA,p,v
+v,p,aDB,o,aSB,p,aDB,o,o,aSB,p,v,p,aDB,o,o,aSB,p,aDB,o,aSB,p,v
+v,p,p,p,p,p,p,p,p,p,p,p,p,p,p,p,p,p,p,p,p,p,v
+v,p,aDA,o,aSA,p,aDA,aSA,p,aDA,o,o,o,aSA,p,aDA,aSA,p,aDA,o,aSA,p,v
+v,p,aDB,o,aSB,p,v,v,p,aDB,aSA,s,aDA,aSB,p,v,v,p,aDB,o,aSB,p,v
+v,p,p,p,p,p,v,v,p,p,v,s,v,p,p,v,v,p,p,p,p,p,v
