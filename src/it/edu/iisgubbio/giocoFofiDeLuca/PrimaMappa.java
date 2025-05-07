@@ -23,8 +23,8 @@ public class PrimaMappa extends Application {
 	Image angoloDestroBasso = new Image(getClass().getResourceAsStream("AngoloDestroBasso.png"));
 	Image angoloSinistroBasso= new Image(getClass().getResourceAsStream("AngoloSinistroBasso.png"));
 	Image angoloT = new Image(getClass().getResourceAsStream("AngoloT.png"));
-	int altezzaMappa = 20;
-	int larghezzaMappa = 50;
+	int altezzaMappa = 100;
+	int larghezzaMappa = 25;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -35,6 +35,8 @@ public class PrimaMappa extends Application {
 		Scene scena = new Scene(g);
 		primaryStage.setTitle("Zombie Land");
 		primaryStage.setScene(scena);
+		primaryStage.setWidth(750);  
+        primaryStage.setHeight(900);  
 		primaryStage.show();
 
 		/*
