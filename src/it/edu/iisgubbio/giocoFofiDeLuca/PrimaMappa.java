@@ -23,6 +23,7 @@ public class PrimaMappa extends Application {
 	Image angoloDestroBasso = new Image(getClass().getResourceAsStream("AngoloDestroBasso.png"));
 	Image angoloSinistroBasso= new Image(getClass().getResourceAsStream("AngoloSinistroBasso.png"));
 	Image angoloT = new Image(getClass().getResourceAsStream("AngoloT.png"));
+	Image angoloTAlto = new Image(getClass().getResourceAsStream("AngoloTAlto.png"));
 	int altezzaMappa = 20;
 	int larghezzaMappa = 50;
 
@@ -83,6 +84,9 @@ public class PrimaMappa extends Application {
 												}else {
 													if(caratteri[x].equals("aSB")){
 														img = angoloSinistroBasso;
+													}else {
+														if(caratteri[x].equals("aTA")){
+															img = angoloTAlto;
 													}
 												}
 											}
@@ -92,7 +96,7 @@ public class PrimaMappa extends Application {
 							}
 						}
 					}
-
+					}
 					ImageView immagine = new ImageView(img);
 					immagine.setFitWidth(32);
 					immagine.setFitHeight(32);

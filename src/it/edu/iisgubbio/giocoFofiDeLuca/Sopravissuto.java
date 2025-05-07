@@ -92,7 +92,36 @@ public class Sopravissuto {
     
     public boolean collisione() {
     	
-    	
+    	switch () {
+        case "aDA":
+        	
+            break; 
+        case "aSA":
+        	
+            break; 
+        case "aDB":
+        	
+            break; 
+            
+        case "aSB":
+            break;
+            
+        case "aT":
+            break;
+        
+        case "aTA":
+            break;
+            
+        case "o":
+            break;
+            
+        case "v":
+            break;
+            
+        default:
+        	
+        	
+    	}
 		
    	}
 
