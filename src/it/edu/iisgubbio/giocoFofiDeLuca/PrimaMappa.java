@@ -24,8 +24,8 @@ public class PrimaMappa extends Application {
 	Image angoloSinistroBasso= new Image(getClass().getResourceAsStream("AngoloSinistroBasso.png"));
 	Image angoloT = new Image(getClass().getResourceAsStream("AngoloT.png"));
 	Image angoloTAlto = new Image(getClass().getResourceAsStream("AngoloTAlto.png"));
-	int altezzaMappa = 50;
-	int larghezzaMappa = 100;
+	int altezzaMappa = 27;
+	int larghezzaMappa = 23;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -34,7 +34,7 @@ public class PrimaMappa extends Application {
 		mappa = new ImageView[larghezzaMappa][altezzaMappa];
 
 		Scene scena = new Scene(g);
-		primaryStage.setTitle("Zombie Land");
+		primaryStage.setTitle("Zombie-Land");
 		primaryStage.setScene(scena);
 		primaryStage.setWidth(750);  
         primaryStage.setHeight(900);  
@@ -45,73 +45,66 @@ public class PrimaMappa extends Application {
 		 * carattere associo un immagine che sarà
 		 * aggiunta alla GridPane
 		 */
-
 		try (
-				InputStream is = getClass().getResourceAsStream("posizionePrimaMappa.txt");
-				InputStreamReader isr = new InputStreamReader(is);
-				BufferedReader lettore = new BufferedReader(isr);
-				) {
+			    InputStream is = getClass().getResourceAsStream("posizionePrimaMappa.txt");
+			    InputStreamReader isr = new InputStreamReader(is);
+			    BufferedReader lettore = new BufferedReader(isr);
+			) {
+			    int y = 0;
+			    String rigaLetta;
+			    
+			    while ((rigaLetta = lettore.readLine()) != null) {
+			        String[] caratteri = rigaLetta.split(",");
 
-			int y=0;
-			String rigaLetta;
-			while ((rigaLetta = lettore.readLine()) != null) {
+			        for (int x = 0; x < caratteri.length; x++) {
+			            Image img = null;
+			            
+			            switch (caratteri[x]) {
+			                case "s":
+			                    img = spazio;
+			                    break;
+			                case "v":
+			                    img = muroVerticale;
+			                    break;
+			                case "o":
+			                    img = muroOrizzontale;
+			                    break;
+			                case "p":
+			                    img = puntino;
+			                    break;
+			                case "aDA":
+			                    img = angoloDestroAlto;
+			                    break;
+			                case "aSA":
+			                    img = angoloSinistroAlto;
+			                    break;
+			                case "aDB":
+			                    img = angoloDestroBasso;
+			                    break;
+			                case "aT":
+			                    img = angoloT;
+			                    break;
+			                case "aSB":
+			                    img = angoloSinistroBasso;
+			                    break;
+			                case "aTA":
+			                    img = angoloTAlto;
+			                    break;
+			            }
 
-				String caratteri[] = rigaLetta.split(",");
+			            ImageView immagine = new ImageView(img);
+			            immagine.setFitWidth(32);
+			            immagine.setFitHeight(32);
+			            immagine.setPreserveRatio(false);
 
-				for (int x = 0; x < caratteri.length; x++) {
-					Image img=null;
-					if (caratteri[x].equals("s")) {
-						img = spazio;
-					} else {
-						if (caratteri[x].equals("v")) {
-							img = muroVerticale;
-						}else {
-							if (caratteri[x].equals("o")) {
-								img = muroOrizzontale;
-							}else {
-								if (caratteri[x].equals("p")) {
-									img = puntino;
-								}else {
-									if (caratteri[x].equals("aDA")) {
-										img = angoloDestroAlto;
-									}else {
-										if (caratteri[x].equals("aSA")) {
-											img = angoloSinistroAlto;
-										}else {
-											if(caratteri[x].equals("aDB")){
-												img = angoloDestroBasso;
-											}else {
-												if(caratteri[x].equals("aT")) {
-													img = angoloT;
-												}else {
-													if(caratteri[x].equals("aSB")){
-														img = angoloSinistroBasso;
-													}else {
-														if(caratteri[x].equals("aTA")){
-															img = angoloTAlto;
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					}
-					ImageView immagine = new ImageView(img);
-					immagine.setFitWidth(32);
-					immagine.setFitHeight(32);
-					immagine.setPreserveRatio(false);
-
-					mappa[x][y] = immagine;
-					g.add(immagine, x, y);
-				}
-				y++;
+			            mappa[x][y] = immagine;
+			            g.add(immagine, x, y);
+			        }
+			        y++;
+			    }
+			} catch (IOException e) {
+			    e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 	}
 

@@ -12,12 +12,8 @@ public class ZombieLand extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		GridPane principale = new GridPane(50,50);
+
 		
-		Scene scene = new Scene(principale);
-	    primaryStage.setTitle("Zombie Land");
-	    primaryStage.setScene(scene);
-	    primaryStage.show();
 	}
 	public static void main(String[] args) {
 		launch(args);
