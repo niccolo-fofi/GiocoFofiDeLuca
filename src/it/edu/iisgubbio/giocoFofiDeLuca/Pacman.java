@@ -13,8 +13,8 @@ public class Pacman extends ImageView {
         public Pacman(Image image, double startX, double startY, Gioco gioco) {
             super(image);
             this.gioco = gioco;
-            this.setFitWidth(38);
-            this.setFitHeight(38);
+            this.setFitWidth(30);
+            this.setFitHeight(30);
             setLayoutX(startX);
             setLayoutY(startY);
         }
