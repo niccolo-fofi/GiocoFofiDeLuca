@@ -11,7 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class PrimaMappa extends Application {
+public class SecondaMappa extends Application {
 
 	ImageView[][] mappa;
 	Image muroVerticale = new Image(getClass().getResourceAsStream("verticale.png"));
@@ -24,8 +24,10 @@ public class PrimaMappa extends Application {
 	Image angoloSinistroBasso= new Image(getClass().getResourceAsStream("AngoloSinistroBasso.png"));
 	Image angoloT = new Image(getClass().getResourceAsStream("AngoloT.png"));
 	Image angoloTAlto = new Image(getClass().getResourceAsStream("AngoloTAlto.png"));
-	int altezzaMappa = 27;
-	int larghezzaMappa = 23;
+	Image angoloTDestra = new Image(getClass().getResourceAsStream("AngoloTDestro.png"));
+	Image angoloTSinistra = new Image(getClass().getResourceAsStream("AngoloTSinistro.png"));
+	int altezzaMappa = 15;
+	int larghezzaMappa = 31;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -40,13 +42,13 @@ public class PrimaMappa extends Application {
         primaryStage.setHeight(900);  
 		primaryStage.show();
 
-		/*
+		/* 
 		 * leggo dal file i caratteri e ad ogni
 		 * carattere associo un immagine che sarà
 		 * aggiunta alla GridPane
 		 */
 		try (
-			    InputStream is = getClass().getResourceAsStream("posizionePrimaMappa.txt");
+			    InputStream is = getClass().getResourceAsStream("posizioneSecondaMappa.txt");
 			    InputStreamReader isr = new InputStreamReader(is);
 			    BufferedReader lettore = new BufferedReader(isr);
 			) {
@@ -84,12 +86,19 @@ public class PrimaMappa extends Application {
 			                case "aT":
 			                    img = angoloT;
 			                    break;
-			                case "aSB":
-			                    img = angoloSinistroBasso;
-			                    break;
 			                case "aTA":
 			                    img = angoloTAlto;
 			                    break;
+			                case "aTS":
+			                    img = angoloTSinistra;
+			                    break;
+			                case "aTD":
+				                img = angoloTDestra;
+				                break;
+			                case "aSB":
+			                    img = angoloSinistroBasso;
+			                    break;
+			                
 			            }
 
 			            ImageView immagine = new ImageView(img);

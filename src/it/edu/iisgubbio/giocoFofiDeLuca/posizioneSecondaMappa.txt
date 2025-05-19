@@ -1,0 +1,15 @@
+aDA,o,o,o,o,o,aT,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,aT,o,o,o,o,o,aSA
+v,p,p,p,p,p,v,p,p,p,p,p,p,p,p,p,p,p,p,p,p,p,p,p,v,p,p,p,p,p,v
+v,p,aDA,o,o,p,v,p,aDA,o,o,p,o,o,o,aT,o,o,o,p,o,o,aSA,p,v,p,p,p,p,p,v
+v,p,v,p,p,p,v,p,v,p,p,p,p,p,p,v,p,p,p,p,p,p,v,p,v,p,p,p,p,p,v
+v,p,p,p,aDA,o,aTS,p,v,p,aDA,o,o,o,p,v,p,aDA,o,o,aSA,p,p,p,aDB,o,aSA,p,p,p,v
+aTD,o,o,p,v,p,v,p,v,p,v,p,p,p,p,p,p,v,p,p,v,p,v,p,p,p,v,p,o,o,aTS
+v,p,p,p,v,p,aDB,o,aSB,p,v,p,aDA,o,o,s,o,aTA,aSA,p,v,p,aDB,o,o,p,v,p,p,p,v
+v,p,o,o,aTS,p,p,p,p,p,p,p,v,s,s,s,s,s,v,p,p,p,p,p,p,p,aTD,o,o,p,v
+v,p,p,p,v,p,o,o,aT,o,aSA,p,aDB,o,o,aT,o,o,aSB,p,v,p,aDA,o,o,p,v,p,p,p,v
+aTD,o,o,p,v,p,p,p,v,p,v,p,p,p,p,v,p,p,p,p,v,p,v,p,p,p,v,p,o,o,aTS
+v,p,p,p,aDB,o,o,p,v,p,aDB,o,o,o,p,v,p,o,o,o,aSB,p,v,p,o,o,aSB,p,p,p,v
+v,p,p,p,p,p,p,p,v,p,p,p,p,p,p,v,p,p,p,p,p,p,v,p,p,p,p,p,v,p,v
+v,p,p,p,p,p,v,p,aDB,o,o,p,o,o,o,aTA,o,o,o,p,aDA,o,aSB,p,v,p,o,o,aSB,p,v
+v,p,p,p,p,p,v,p,p,p,p,p,p,p,p,p,p,p,p,p,v,p,p,p,v,p,p,p,p,p,v
+aDB,o,o,o,o,o,aTA,o,o,o,o,o,o,o,o,o,o,o,o,o,aTA,o,o,o,aTA,o,o,o,o,o,aSB
