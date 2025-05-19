@@ -88,8 +88,8 @@ public class PrimaMappa extends Application {
 			                    img = angoloSinistroBasso;
 			                    break;
 			                case "aTA":
-			                    img = angoloTAlto;
-			                    break;
+			                	img = angoloTAlto;
+			                	break;
 			            }
 
 			            ImageView immagine = new ImageView(img);
@@ -102,10 +102,23 @@ public class PrimaMappa extends Application {
 			        }
 			        y++;
 			    }
-			} catch (IOException e) {
-			    e.printStackTrace();
-			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
+	}
+
+	public boolean puoAndarci() {
+		try (
+				InputStream is = getClass().getResourceAsStream("posizionePrimaMappa.txt");
+				InputStreamReader isr = new InputStreamReader(is);
+				BufferedReader lettore = new BufferedReader(isr);
+				) {
+			String rigaLetta; 
+			while ((rigaLetta = lettore.readLine()) != null) {
+				String[] caratteri = rigaLetta.split(",");
+			}
+		}
 	}
 
 	public static void main(String[] args) {
