@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class SecondaMappa extends Application {
@@ -38,8 +40,8 @@ public class SecondaMappa extends Application {
 		Scene scena = new Scene(g);
 		primaryStage.setTitle("Zombie-Land");
 		primaryStage.setScene(scena);
-		primaryStage.setWidth(750);  
-        primaryStage.setHeight(900);  
+		primaryStage.setWidth(1005);  
+        primaryStage.setHeight(515);  
 		primaryStage.show();
 
 		/* 
@@ -115,6 +117,11 @@ public class SecondaMappa extends Application {
 			    e.printStackTrace();
 			}
 
+		Pane pacmanLayer = new Pane();
+		Sopravvissuto sopravvissuto = new Sopravvissuto(new Image(getClass().getResourceAsStream("zombie-1.png")), 40, 40);
+		pacmanLayer.getChildren().add(sopravvissuto);
+		StackPane root = new StackPane(g, pacmanLayer);
+		
 	}
 
 	public static void main(String[] args) {

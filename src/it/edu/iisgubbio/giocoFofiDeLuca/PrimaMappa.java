@@ -108,19 +108,6 @@ public class PrimaMappa extends Application {
 
 	}
 
-	public boolean puoAndarci() {
-		try (
-				InputStream is = getClass().getResourceAsStream("posizionePrimaMappa.txt");
-				InputStreamReader isr = new InputStreamReader(is);
-				BufferedReader lettore = new BufferedReader(isr);
-				) {
-			String rigaLetta; 
-			while ((rigaLetta = lettore.readLine()) != null) {
-				String[] caratteri = rigaLetta.split(",");
-			}
-		}
-	}
-
 	public static void main(String[] args) {
 		launch(args);
 	}

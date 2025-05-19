@@ -4,11 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class TerzaMappa extends Application {
@@ -26,20 +30,29 @@ public class TerzaMappa extends Application {
 	Image angoloTAlto = new Image(getClass().getResourceAsStream("AngoloTAlto.png"));
 	Image angoloTDestra = new Image(getClass().getResourceAsStream("AngoloTDestro.png"));
 	Image angoloTSinistra = new Image(getClass().getResourceAsStream("AngoloTSinistro.png"));
-	int altezzaMappa = 60;
-	int larghezzaMappa = 60;
+	int altezzaMappa = 100;
+	int larghezzaMappa = 100;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
 		GridPane g = new GridPane();
+		Pane sopravvisutoLayer = new Pane();
+		Sopravvissuto sopravvissuto = new Sopravvissuto(new Image(getClass().getResourceAsStream("zombie-1.png")), 30, 30);
+		sopravvisutoLayer.getChildren().add(sopravvissuto);
+		StackPane strati = new StackPane(g, sopravvisutoLayer);
+		AnimationTimer timer = new AnimationTimer() {
+		    @Override
+		    public void handle(long now) {
+		        sopravvissuto.aggiornaPosizione();
+		    }
+		};
+		timer.start();
 		mappa = new ImageView[larghezzaMappa][altezzaMappa];
 
-		Scene scena = new Scene(g);
+		Scene scena = new Scene(strati,1650,980);
 		primaryStage.setTitle("Zombie-Land");
-		primaryStage.setScene(scena);
-		primaryStage.setWidth(750);  
-        primaryStage.setHeight(900);  
+		primaryStage.setScene(scena); 
 		primaryStage.show();
 
 		/* 
@@ -115,6 +128,23 @@ public class TerzaMappa extends Application {
 			    e.printStackTrace();
 			}
 
+		scena.setOnKeyPressed(event -> {
+		    switch (event.getCode()) {
+		        case UP:
+		            sopravvissuto.setDirezione("UP");
+		            break;
+		        case DOWN:
+		            sopravvissuto.setDirezione("DOWN");
+		            break;
+		        case LEFT:
+		            sopravvissuto.setDirezione("LEFT");
+		            break;
+		        case RIGHT:
+		            sopravvissuto.setDirezione("RIGHT");
+		            break;
+		    }
+		});
+		
 	}
 
 	public static void main(String[] args) {
