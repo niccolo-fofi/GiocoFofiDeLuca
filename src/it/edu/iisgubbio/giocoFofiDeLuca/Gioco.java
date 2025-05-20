@@ -39,7 +39,8 @@ public class Gioco extends Application {
 	char mappaCaratteri[][]=new char[larghezzaMappa][altezzaMappa];
 	int punteggio=0;
 	Label lPunteggio = new Label(punteggio+"");
-
+	String direzioneRichiesta="";
+	String direzioneAttuale="";
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -158,25 +159,28 @@ public class Gioco extends Application {
 	    if (x < 0 || x >= larghezzaMappa || y < 0 || y >= altezzaMappa) {
 	        return false;
 	    }
+	    	    	
 	    return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p');
 	}
 	
 	public void raccogliPuntino(int x, int y) {
 	    mappaCaratteri[x][y] = 's';
 	    mappa[x][y].setImage(spazio);
-	    punteggio=punteggio+10;
+	    punteggio=punteggio+5;
 	    lPunteggio.setText(punteggio+"");
 	}
 
 	public boolean teletrasporta(double colonna) {
 
-	 if(colonna==larghezzaMappa-1 ){
-		 return true;
-		}else {
-			return false;
-		}
-	}
-
+		if (colonna >= larghezzaMappa) {
+	        return true;
+			}
+		 if(colonna<0) {
+		    	return true;
+		    }
+		 return false;
+	    }
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
