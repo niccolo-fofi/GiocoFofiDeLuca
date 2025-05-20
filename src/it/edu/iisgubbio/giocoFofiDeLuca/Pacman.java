@@ -5,8 +5,8 @@ import javafx.scene.image.ImageView;
 
 public class Pacman extends ImageView {
 	int larghezzaMappa=52;
-	int altezzaMappa=31;
-    private double speed = 1.0;
+	int altezzaMappa=32;
+    private double velocita = 2.5;
     private String direzione = ""; 
     private Gioco gioco;
 
@@ -29,26 +29,37 @@ public class Pacman extends ImageView {
         
         switch (direzione) {
             case "UP":
-                y -= speed;
+                y -= velocita;
                 setRotate(270);
+                System.out.println(x);
+                System.out.println(y);
+
                 break;
             case "DOWN":
-                y += speed;
+                y += velocita;
                 setRotate(90);
                 break;
             case "LEFT":
-                x -= speed;
+                x -= velocita;
                 setRotate(180);
                 break;
             case "RIGHT":
-                x += speed;
+                x += velocita;
                 setRotate(0);
                 break;
         }
 
         int colonna = (int)Math.round(x / 32.0);  
         int riga = (int)Math.round(y / 32.0);
+        
+        if (gioco.mappaCaratteri[colonna][riga] == 'p') {
+            gioco.raccogliPuntino(colonna, riga);
+        }
 
+        if(gioco.teletrasporta(x)) {
+        	setLayoutX(0);
+        }
+        
         if (gioco.calpestabile(colonna, riga)) {
             setLayoutX(x);
             setLayoutY(y);

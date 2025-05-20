@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -17,6 +18,9 @@ import javafx.stage.Stage;
 
 public class Gioco extends Application {
 
+	/*
+	 * importo immagini,gif e variabili
+	 */
 	ImageView[][] mappa;
 	Image muroVerticale = new Image(getClass().getResourceAsStream("verticale.png"));
 	Image muroOrizzontale = new Image(getClass().getResourceAsStream("orizontale.png"));
@@ -33,15 +37,19 @@ public class Gioco extends Application {
 	int altezzaMappa = 32;
 	int larghezzaMappa = 52;
 	char mappaCaratteri[][]=new char[larghezzaMappa][altezzaMappa];
+	int punteggio=0;
+	Label lPunteggio = new Label(punteggio+"");
+
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
-		GridPane g = new GridPane();
-		Pane pacmanLayer = new Pane();
-		Pacman pacman = new Pacman(new Image(getClass().getResourceAsStream("pacman.gif")), 32, 50, this);
+		GridPane g = new GridPane();//creo la gridpane su cui verrà creata la mappa
+		Pane pacmanLayer = new Pane();//creo la pane su cui si muoverà pacman e i fantasmini
+		Pacman pacman = new Pacman(new Image(getClass().getResourceAsStream("pacman.gif")), 32, 50, this);//creo pacman,caricando l'immagine e il punto di partenza
 		pacmanLayer.getChildren().add(pacman);
-		StackPane strati = new StackPane(g, pacmanLayer);
+		StackPane strati = new StackPane(g, pacmanLayer); //sovrappongo il pane alla gridpane
+		g.add(lPunteggio, 1, 0);//aggiungo la variabile punteggio alla gridpane
 		AnimationTimer timer = new AnimationTimer() {
 		    @Override
 		    public void handle(long now) {
@@ -150,10 +158,24 @@ public class Gioco extends Application {
 	    if (x < 0 || x >= larghezzaMappa || y < 0 || y >= altezzaMappa) {
 	        return false;
 	    }
-	    char a = mappaCaratteri[x][y];
-	    return (a == 's' || a == 'p');
+	    return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p');
 	}
 	
+	public void raccogliPuntino(int x, int y) {
+	    mappaCaratteri[x][y] = 's';
+	    mappa[x][y].setImage(spazio);
+	    punteggio=punteggio+10;
+	    lPunteggio.setText(punteggio+"");
+	}
+
+	public boolean teletrasporta(double colonna) {
+
+	 if(colonna==larghezzaMappa-1 ){
+		 return true;
+		}else {
+			return false;
+		}
+	}
 
 	public static void main(String[] args) {
 		launch(args);
