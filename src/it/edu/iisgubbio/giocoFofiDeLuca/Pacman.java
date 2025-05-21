@@ -6,11 +6,13 @@ import javafx.scene.image.ImageView;
 public class Pacman extends ImageView {
     int larghezzaMappa = 52;
     int altezzaMappa = 32;
-    private double velocita = 2.4;
-    private String direzione = "";
+    private double velocita = 2.0;
+	private String direzione = "";
     private Gioco gioco;
     double startX;
     double startY;
+    int rigaPacman;
+    int colonnaPacman;
     double x = getLayoutX();
     double y = getLayoutY();
     
@@ -30,7 +32,9 @@ public class Pacman extends ImageView {
         this.direzione = direzione;
     }
     
-    
+    public String getDirezione() {
+		return direzione;
+	}
 
     public void aggiornaPosizionePacman() {
         double x = getLayoutX();
@@ -56,16 +60,16 @@ public class Pacman extends ImageView {
                 break;
         }
 
-        int colonna = (int) Math.round(x / 32.0);
-        int riga = (int) Math.round(y / 32.0);
+         colonnaPacman = (int) Math.round(x / 32.0);
+         rigaPacman = (int) Math.round(y / 32.0);
 
-        if (gioco.teletrasporta(colonna)) {
-        	if(colonna>=gioco.larghezzaMappa) {
+        if (gioco.teletrasporta(colonnaPacman)) {
+        	if(colonnaPacman>=gioco.larghezzaMappa) {
         		 setLayoutX(0); 
                  setDirezione("RIGHT"); 
                  return; 
         	}else {
-        		if(colonna<0) {
+        		if(colonnaPacman<0) {
         			setLayoutX(1632); 
                     setDirezione("LEFT"); 
                     return; 
@@ -74,13 +78,13 @@ public class Pacman extends ImageView {
            
         }
 
-        if (gioco.calpestabilePacman(colonna, riga)) {
+        if (gioco.calpestabilePacman(colonnaPacman, rigaPacman)) {
             setLayoutX(x);
             setLayoutY(y);
             
 
-            if (gioco.mappaCaratteri[colonna][riga] == 'p') {
-                gioco.raccogliPuntino(colonna, riga);
+            if (gioco.mappaCaratteri[colonnaPacman][rigaPacman] == 'p') {
+                gioco.raccogliPuntino(colonnaPacman, rigaPacman);
             }
         }
     }

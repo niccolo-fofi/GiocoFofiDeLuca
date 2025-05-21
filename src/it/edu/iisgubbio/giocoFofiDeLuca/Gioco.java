@@ -67,6 +67,9 @@ public class Gioco extends Application {
 			public void handle(long now) {
 				pacman.aggiornaPosizionePacman();
 				fantasmaRosso.aggiornaPosizioneFantasma();
+				fantasmaGiallo.aggiornaPosizioneFantasma();
+				fantasmaRosa.aggiornaPosizioneFantasma();
+				fantasmaAzzurro.aggiornaPosizioneFantasma();
 				pacmanX=pacman.getLayoutX();
 				pacmanY=pacman.getLayoutY();
 			}
@@ -155,7 +158,8 @@ public class Gioco extends Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
+		
 		scena.setOnKeyPressed(event -> {
 			switch (event.getCode()) {
 			case UP:
@@ -171,9 +175,8 @@ public class Gioco extends Application {
 				pacman.setDirezione("RIGHT");
 				break;
 			}
+			
 		});
-		
-		fantasmaRosso.setDirezione("UP");
 		
 	}
 	public boolean calpestabilePacman(int x, int y) {
@@ -193,8 +196,6 @@ public class Gioco extends Application {
 
 		return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p'||mappaCaratteri[x][y] == 'b');
 	}
-
-
 
 
 	public void raccogliPuntino(int x, int y) {
