@@ -34,28 +34,42 @@ public class Gioco extends Application {
 	Image angoloTAlto = new Image(getClass().getResourceAsStream("AngoloTAlto.png"));
 	Image angoloTDestra = new Image(getClass().getResourceAsStream("AngoloTDestro.png"));
 	Image angoloTSinistra = new Image(getClass().getResourceAsStream("AngoloTSinistro.png"));
+	Image lineaBlu = new Image(getClass().getResourceAsStream("lineaAzzurra.png"));
+	Pacman pacman;
+	double pacmanX;
+	double pacmanY;
+
 	int altezzaMappa = 32;
 	int larghezzaMappa = 52;
 	char mappaCaratteri[][]=new char[larghezzaMappa][altezzaMappa];
 	int punteggio=0;
 	Label lPunteggio = new Label(punteggio+"");
-	String direzioneRichiesta="";
-	String direzioneAttuale="";
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
 		GridPane g = new GridPane();//creo la gridpane su cui verrà creata la mappa
-		Pane pacmanLayer = new Pane();//creo la pane su cui si muoverà pacman e i fantasmini
-		Pacman pacman = new Pacman(new Image(getClass().getResourceAsStream("pacman.gif")), 32, 50, this);//creo pacman,caricando l'immagine e il punto di partenza
-		pacmanLayer.getChildren().add(pacman);
-		StackPane strati = new StackPane(g, pacmanLayer); //sovrappongo il pane alla gridpane
+		Pane stratoPersonaggi = new Pane();//creo la pane su cui si muoverà pacman e i fantasmini
+		Fantasma fantasmaRosso = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-rosso.gif")), 790, 460, this);
+		Fantasma fantasmaGiallo = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-giallo.gif")), 750, 460, this);
+		Fantasma fantasmaRosa = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-rosa.gif")), 830, 460, this);
+		Fantasma fantasmaAzzurro = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-Azzurro.gif")), 870, 460, this);
+		pacman = new Pacman(new Image(getClass().getResourceAsStream("pacman.gif")), 32, 50, this);//creo pacman,caricando l'immagine e il punto di partenza
+		stratoPersonaggi.getChildren().add(pacman);
+		stratoPersonaggi.getChildren().add(fantasmaRosso);
+		stratoPersonaggi.getChildren().add(fantasmaRosa);
+		stratoPersonaggi.getChildren().add(fantasmaGiallo);
+		stratoPersonaggi.getChildren().add(fantasmaAzzurro);
+		StackPane strati = new StackPane(g, stratoPersonaggi); //sovrappongo il pane alla gridpane
 		g.add(lPunteggio, 1, 0);//aggiungo la variabile punteggio alla gridpane
 		AnimationTimer timer = new AnimationTimer() {
-		    @Override
-		    public void handle(long now) {
-		        pacman.aggiornaPosizione();
-		    }
+			@Override
+			public void handle(long now) {
+				pacman.aggiornaPosizionePacman();
+				fantasmaRosso.aggiornaPosizioneFantasma();
+				pacmanX=pacman.getLayoutX();
+				pacmanY=pacman.getLayoutY();
+			}
 		};
 		timer.start();
 		mappa = new ImageView[larghezzaMappa][altezzaMappa];
@@ -71,116 +85,140 @@ public class Gioco extends Application {
 		 * aggiunta alla GridPane
 		 */
 		try (
-			    InputStream is = getClass().getResourceAsStream("posizionePrimaMappa.txt");
-			    InputStreamReader isr = new InputStreamReader(is);
-			    BufferedReader lettore = new BufferedReader(isr);
-			) {
-			    int y = 0;
-			    String rigaLetta;
-			    
-			    while ((rigaLetta = lettore.readLine()) != null) {
-			        String[] caratteri = rigaLetta.split(",");
+				InputStream is = getClass().getResourceAsStream("PosizionePrimaMappa.txt");
+				InputStreamReader isr = new InputStreamReader(is);
+				BufferedReader lettore = new BufferedReader(isr);
+				) {
+			int y = 0;
+			String rigaLetta;
+			
 
-			        for (int x = 0; x < caratteri.length; x++) {
-			        	mappaCaratteri[x][y] = caratteri[x].charAt(0);
-			            Image img = null;
-			            switch (caratteri[x]) {
-			                case "s":
-			                    img = spazio;
-			                    break;
-			                case "v":
-			                    img = muroVerticale;
-			                    break;
-			                case "o":
-			                    img = muroOrizzontale;
-			                    break;
-			                case "p":
-			                    img = puntino;
-			                    break;
-			                case "aDA":
-			                    img = angoloDestroAlto;
-			                    break;
-			                case "aSA":
-			                    img = angoloSinistroAlto;
-			                    break;
-			                case "aDB":
-			                    img = angoloDestroBasso;
-			                    break;
-			                case "aT":
-			                    img = angoloT;
-			                    break;
-			                case "aTA":
-			                    img = angoloTAlto;
-			                    break;
-			                case "aTS":
-			                    img = angoloTSinistra;
-			                    break;
-			                case "aTD":
-				                img = angoloTDestra;
-				                break;
-			                case "aSB":
-			                    img = angoloSinistroBasso;
-			                    break;
-			                
-			            }
+			while ((rigaLetta = lettore.readLine()) != null) {
+				String[] caratteri = rigaLetta.split(",");
 
-			            ImageView immagine = new ImageView(img);
-			            immagine.setFitWidth(32);
-			            immagine.setFitHeight(32);
-			            immagine.setPreserveRatio(false);
+				for (int x = 0; x < caratteri.length; x++) {
+					mappaCaratteri[x][y] = caratteri[x].charAt(0);
+					Image img = null;
+					switch (caratteri[x]) {
+					case "s":
+						img = spazio;
+						break;
+					case "v":
+						img = muroVerticale;
+						break;
+					case "o":
+						img = muroOrizzontale;
+						break;
+					case "p":
+						img = puntino;
+						break;
+					case "aDA":
+						img = angoloDestroAlto;
+						break;
+					case "aSA":
+						img = angoloSinistroAlto;
+						break;
+					case "aDB":
+						img = angoloDestroBasso;
+						break;
+					case "aT":
+						img = angoloT;
+						break;
+					case "aTA":
+						img = angoloTAlto;
+						break;
+					case "aTS":
+						img = angoloTSinistra;
+						break;
+					case "aTD":
+						img = angoloTDestra;
+						break;
+					case "aSB":
+						img = angoloSinistroBasso;
+						break;
+					case "b":
+						img = lineaBlu;
+						break;
 
-			            mappa[x][y] = immagine;
-			            g.add(immagine, x, y);
-			        }
-			        y++;
-			    }
-			} catch (IOException e) {
-			    e.printStackTrace();
+					}
+
+					ImageView immagine = new ImageView(img);
+					immagine.setFitWidth(32);
+					immagine.setFitHeight(32);
+					immagine.setPreserveRatio(false);
+
+					mappa[x][y] = immagine;
+					g.add(immagine, x, y);
+				}
+				y++;
 			}
-		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		scena.setOnKeyPressed(event -> {
-		    switch (event.getCode()) {
-		        case UP:
-			        pacman.setDirezione("UP");
-		        	break;
-		        case DOWN:
-		            pacman.setDirezione("DOWN");
-		            break;
-		        case LEFT:
-		            pacman.setDirezione("LEFT");
-		            break;
-		        case RIGHT:
-		            pacman.setDirezione("RIGHT");
-		            break;
-		    }
+			switch (event.getCode()) {
+			case UP:
+				pacman.setDirezione("UP");
+				break;
+			case DOWN:
+				pacman.setDirezione("DOWN");
+				break;
+			case LEFT:
+				pacman.setDirezione("LEFT");
+				break;
+			case RIGHT:
+				pacman.setDirezione("RIGHT");
+				break;
+			}
 		});
+		
+		fantasmaRosso.setDirezione("UP");
+		
 	}
-	public boolean calpestabile(int x, int y) {
-	    if (x < 0 || x >= larghezzaMappa || y < 0 || y >= altezzaMappa) {
-	        return false;
-	    }
-	    	    	
-	    return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p');
+	public boolean calpestabilePacman(int x, int y) {
+		if (x < 0 || x >= larghezzaMappa || y < 0 || y >= altezzaMappa) {
+			return false;
+		}
+
+		return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p');
 	}
-	
+
+
+
+	public boolean calpestabileFantasma(int x, int y) {
+		if (x < 0 || x >= larghezzaMappa || y < 0 || y >= altezzaMappa) {
+			return false;
+		}
+
+		return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p'||mappaCaratteri[x][y] == 'b');
+	}
+
+
+
+
 	public void raccogliPuntino(int x, int y) {
-	    mappaCaratteri[x][y] = 's';
-	    mappa[x][y].setImage(spazio);
-	    punteggio=punteggio+5;
-	    lPunteggio.setText(punteggio+"");
+		mappaCaratteri[x][y] = 's';
+		mappa[x][y].setImage(spazio);
+		punteggio=punteggio+5;
+		lPunteggio.setText(punteggio+"");
 	}
+
+
+
 
 	public boolean teletrasporta(double colonna) {
 
 		if (colonna >= larghezzaMappa) {
-	        return true;
-			}
-		 if(colonna<0) {
-		    	return true;
-		    }
-		 return false;
-	    }
-	
+			return true;
+		}
+		if(colonna<0) {
+			return true;
+		}
+		return false;
+	}
+
+
 	public static void main(String[] args) {
 		launch(args);
 	}

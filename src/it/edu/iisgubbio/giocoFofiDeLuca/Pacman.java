@@ -6,15 +6,22 @@ import javafx.scene.image.ImageView;
 public class Pacman extends ImageView {
     int larghezzaMappa = 52;
     int altezzaMappa = 32;
-    private double velocita = 1.8;
+    private double velocita = 2.4;
     private String direzione = "";
     private Gioco gioco;
+    double startX;
+    double startY;
+    double x = getLayoutX();
+    double y = getLayoutY();
+    
 
     public Pacman(Image image, double startX, double startY, Gioco gioco) {
         super(image);
         this.gioco = gioco;
         this.setFitWidth(30);
         this.setFitHeight(30);
+        this.startX = startX;
+        this.startX = startY;
         setLayoutX(startX);
         setLayoutY(startY);
     }
@@ -22,8 +29,10 @@ public class Pacman extends ImageView {
     public void setDirezione(String direzione) {
         this.direzione = direzione;
     }
+    
+    
 
-    public void aggiornaPosizione() {
+    public void aggiornaPosizionePacman() {
         double x = getLayoutX();
         double y = getLayoutY();
 
@@ -65,7 +74,7 @@ public class Pacman extends ImageView {
            
         }
 
-        if (gioco.calpestabile(colonna, riga)) {
+        if (gioco.calpestabilePacman(colonna, riga)) {
             setLayoutX(x);
             setLayoutY(y);
             
