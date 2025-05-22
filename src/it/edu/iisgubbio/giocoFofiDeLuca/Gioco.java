@@ -36,7 +36,8 @@ public class Gioco extends Application {
     Image angoloTAlto = new Image(getClass().getResourceAsStream("AngoloTAlto.png"));
     Image angoloTDestra = new Image(getClass().getResourceAsStream("AngoloTDestro.png"));
     Image angoloTSinistra = new Image(getClass().getResourceAsStream("AngoloTSinistro.png"));
-    Image lineaBlu = new Image(getClass().getResourceAsStream("lineaAzzurra.png"));
+    Image lineabluorizontale = new Image(getClass().getResourceAsStream("LineaBluOrizontale.png"));
+    Image lineabluverticale = new Image(getClass().getResourceAsStream("LineaBluVerticale.png"));
     Pacman pacman;
     double pacmanX;
     double pacmanY;
@@ -213,7 +214,8 @@ public class Gioco extends Application {
                         case "aTS": img = angoloTSinistra; break;
                         case "aTD": img = angoloTDestra; break;
                         case "aSB": img = angoloSinistroBasso; break;
-                        case "b": img = lineaBlu; break;
+                        case "bo": img = lineabluorizontale; break;
+                        case "bv": img = lineabluverticale; break;
                     }
 
                     ImageView immagine = new ImageView(img);
