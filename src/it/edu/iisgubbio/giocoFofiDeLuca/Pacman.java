@@ -23,7 +23,7 @@ public class Pacman extends ImageView {
         this.setFitWidth(30);
         this.setFitHeight(30);
         this.startX = startX;
-        this.startX = startY;
+        this.startY = startY; // Corretto da startX a startY
         setLayoutX(startX);
         setLayoutY(startY);
     }
@@ -99,7 +99,7 @@ public class Pacman extends ImageView {
             setLayoutY(y);
             
 
-            if (gioco.mappaCaratteri[colonnaPacman][rigaPacman] == 'p') {
+            if (gioco.mappaCaratteri[colonnaPacman][rigaPacman] == 'p' || gioco.mappaCaratteri[colonnaPacman][rigaPacman] == 'z') { // Controlla anche 'z'
                 gioco.raccogliPuntino(colonnaPacman, rigaPacman);
             }
         }

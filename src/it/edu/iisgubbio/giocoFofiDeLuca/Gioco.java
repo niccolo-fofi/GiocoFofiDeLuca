@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.geometry.Pos; 
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,7 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox; 
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -36,10 +36,10 @@ public class Gioco extends Application {
     Image angoloTAlto = new Image(getClass().getResourceAsStream("AngoloTAlto.png"));
     Image angoloTDestra = new Image(getClass().getResourceAsStream("AngoloTDestro.png"));
     Image angoloTSinistra = new Image(getClass().getResourceAsStream("AngoloTSinistro.png"));
-    Image lineabluorizontale = new Image(getClass().getResourceAsStream("LineaBluOrizontale.png"));
-    Image lineabluverticale = new Image(getClass().getResourceAsStream("LineaBluVerticale.png"));
-    Image pallinoGrande = new Image(getClass().getResourceAsStream("pallinoGrande.png"));
-    Image fanstasmaImpaurito = new Image(getClass().getResourceAsStream("fantasmaImpaurito.png"));
+    Image lineabluorizontale = new Image(getClass().getResourceAsStream("lineaAzzurra.png"));
+    Image lineabluverticale = new Image(getClass().getResourceAsStream("lineaAzzurra.png"));
+    Image pallinoGrande = new Image(getClass().getResourceAsStream("lineaAzzurra.png"));
+    Image fantasmaImpaurito = new Image(getClass().getResourceAsStream("fantasmaImpaurito2.gif"));
 
     Pacman pacman;
     double pacmanX;
@@ -49,7 +49,8 @@ public class Gioco extends Application {
     int vite=3;
     char mappaCaratteri[][]=new char[larghezzaMappa][altezzaMappa];
     int punteggio=0;
-    Label lPunteggio = new Label(punteggio+"");
+    Label lPunteggio = new Label("punteggio: " +punteggio);
+    Label lVite = new Label("vite:" + vite);
     GridPane g;
     Pane stratoPersonaggi;
     Fantasma fantasmaRosso;
@@ -68,12 +69,29 @@ public class Gioco extends Application {
 
     private MediaPlayer canzoneIntro;
 
+    private boolean powerUpAttivo = false;
+    private AnimationTimer timerPowerUp;
+    private long powerUpStartTime;
+    private final long durataPowerUp =  10 * 1_000_000_000L ; 
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
     	lPunteggio.setStyle(
-    		    "-fx-font-weight: bold;" +
+    			"-fx-font-weight: bold;" +
+    		    "-fx-text-fill: WHITE;"
+    		    );
+    	lVite.setStyle("-fx-font-weight: bold;" +
     		    "-fx-text-fill: WHITE;");
+    	
+    	StackPane.setAlignment(lPunteggio, Pos.TOP_LEFT);
+    	StackPane.setAlignment(lVite, Pos.TOP_RIGHT);
+    	
+    	lPunteggio.setTranslateX(10); 
+    	lPunteggio.setTranslateY(10); 
+
+    	lVite.setTranslateX(-10); // 
+    	lVite.setTranslateY(10);
 
     	String canzone = getClass().getResource("ZISO - Street Wisdom.mp3").toExternalForm();
         Media media = new Media(canzone);
@@ -117,17 +135,19 @@ public class Gioco extends Application {
 
         g = new GridPane();
         stratoPersonaggi = new Pane();
-        fantasmaRosso = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-rosso.gif")), 790, 460, this);
-        fantasmaGiallo = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-giallo.gif")), 750, 460, this);
-        fantasmaRosa = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-rosa.gif")), 830, 460, this);
-        fantasmaAzzurro = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-Azzurro.gif")), 870, 460, this);
+        fantasmaRosso = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-rosso.gif")), 790, 460, this, "rosso"); 
+        fantasmaGiallo = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-giallo.gif")), 750, 460, this, "giallo"); 
+        fantasmaRosa = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-rosa.gif")), 830, 460, this, "rosa");
+        fantasmaAzzurro = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-Azzurro.gif")), 870, 460, this, "azzurro"); 
+        
         pacman = new Pacman(new Image(getClass().getResourceAsStream("pacman.gif")), 32, 50, this);
+        
         stratoPersonaggi.getChildren().add(pacman);
         stratoPersonaggi.getChildren().add(fantasmaRosso);
         stratoPersonaggi.getChildren().add(fantasmaRosa);
         stratoPersonaggi.getChildren().add(fantasmaGiallo);
         stratoPersonaggi.getChildren().add(fantasmaAzzurro);
-        strati = new StackPane(g, stratoPersonaggi,lPunteggio); 
+        strati = new StackPane(g, stratoPersonaggi,lPunteggio,lVite); 
 
         mappa = new ImageView[larghezzaMappa][altezzaMappa];
         caricaMappa();
@@ -168,16 +188,32 @@ public class Gioco extends Application {
             public void handle(long now) {
                 pacman.aggiornaPosizionePacman();
                 fantasmaRosso.aggiornaPosizioneFantasma();
-                fantasmaGiallo.aggiornaPosizioneFantasma();
                 fantasmaRosa.aggiornaPosizioneFantasma();
+                fantasmaGiallo.aggiornaPosizioneFantasma();
                 fantasmaAzzurro.aggiornaPosizioneFantasma();
+               
                 pacmanX = pacman.getLayoutX();
                 pacmanY = pacman.getLayoutY();
                 
                 haiVinto(primaryStage); 
                 controllaCollisioneFantasmi(primaryStage);
+
+                if (powerUpAttivo && (now - powerUpStartTime > durataPowerUp)) {
+                    disattivaPowerUp();
+                }
             }
         };
+
+        timerPowerUp = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (powerUpAttivo && (now - powerUpStartTime > durataPowerUp)) {
+                    disattivaPowerUp();
+                    this.stop();
+                }
+            }
+        };
+
 
         start.setOnAction(e -> {
         	canzoneIntro.stop();
@@ -217,9 +253,9 @@ public class Gioco extends Application {
                         case "aTS": img = angoloTSinistra; break;
                         case "aTD": img = angoloTDestra; break;
                         case "aSB": img = angoloSinistroBasso; break;
-                        case "bo": img = lineabluorizontale; break;
-                        case "bv": img = lineabluverticale; break;
-                        case "pG": img = pallinoGrande; break;
+                        case "l": img = lineabluorizontale; break;
+                        case "x": img = lineabluverticale; break;
+                        case "z": img = pallinoGrande; break;
 
                     }
 
@@ -242,22 +278,28 @@ public class Gioco extends Application {
         if (x < 0 || x >= larghezzaMappa || y < 0 || y >= altezzaMappa) {
             return false;
         }
-        return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p' || mappaCaratteri[x][y] == 'pG');
-    }
+        return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p' || mappaCaratteri[x][y]=='z');
 
+    }
+    
     public boolean calpestabileFantasma(int x, int y) {
         if (x < 0 || x >= larghezzaMappa || y < 0 || y >= altezzaMappa) {
             return false;
         }
-        return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p' || mappaCaratteri[x][y] == 'bo'
-        		|| mappaCaratteri[x][y] == 'bv' || mappaCaratteri[x][y] == 'pG');
+        return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p' || mappaCaratteri[x][y] == 'l' || mappaCaratteri[x][y] == 'x' || mappaCaratteri[x][y] == 'z');
     }
 
     public void raccogliPuntino(int x, int y) {
-        mappaCaratteri[x][y] = 's';
-        mappa[x][y].setImage(spazio);
-        punteggio = punteggio + 5;
-        lPunteggio.setText(punteggio + "");
+        if (mappaCaratteri[x][y] == 'p') {
+            mappaCaratteri[x][y] = 's';
+            mappa[x][y].setImage(spazio);
+            punteggio = punteggio + 5;
+            lPunteggio.setText("Punteggio: "+punteggio);
+        } else if (mappaCaratteri[x][y] == 'z') {
+            mappaCaratteri[x][y] = 's';
+            mappa[x][y].setImage(spazio);
+            attivaPowerUp();
+        }
     }
 
     public boolean teletrasporta(double colonna) {
@@ -268,38 +310,86 @@ public class Gioco extends Application {
     }
     
     public void haiVinto(Stage primaryStage) {
-        if(punteggio >= 2860) {
+        if(punteggio >= 2860) { 
             primaryStage.setScene(scenaVittoria); 
+            timerGioco.stop();
+            if (timerPowerUp != null) timerPowerUp.stop(); 
         }
     }
 
     private void controllaCollisioneFantasmi(Stage primaryStage) {
-        if (pacman.getColonnaPacman() == fantasmaRosso.getColonnaFantasma() && 
-            pacman.getRigaPacman() == fantasmaRosso.getRigaFantasma()) {
-            fermaGioco(primaryStage);
-            return;
-        }
-        if (pacman.getColonnaPacman() == fantasmaGiallo.getColonnaFantasma() && 
-            pacman.getRigaPacman() == fantasmaGiallo.getRigaFantasma()) {
-            fermaGioco(primaryStage);
-            return;
-        }
-        if (pacman.getColonnaPacman() == fantasmaRosa.getColonnaFantasma() && 
-            pacman.getRigaPacman() == fantasmaRosa.getRigaFantasma()) {
-            fermaGioco(primaryStage);
-            return;
-        }
-        if (pacman.getColonnaPacman() == fantasmaAzzurro.getColonnaFantasma() && 
-            pacman.getRigaPacman() == fantasmaAzzurro.getRigaFantasma()) {
-            fermaGioco(primaryStage);
-            return;
+        Fantasma[] fantasmi = {fantasmaRosso, fantasmaGiallo, fantasmaRosa, fantasmaAzzurro};
+
+        for (Fantasma fantasma : fantasmi) {
+            if (pacman.getColonnaPacman() == fantasma.getColonnaFantasma() && 
+                pacman.getRigaPacman() == fantasma.getRigaFantasma()) {
+                
+                if (powerUpAttivo) {
+                    respawnFantasma(fantasma);
+                } else {
+                	if(vite>1) {
+                		vite--;
+                		lVite.setText("vite: "+vite);
+                		pacman.setLayoutX(50);
+                		pacman.setLayoutY(50);
+                        respawnFantasma(fantasma);
+                	}else {
+                		fermaGioco(primaryStage);
+                        return;
+                	}
+                }
+            }
         }
     }
 
+    private void respawnFantasma(Fantasma fantasma) {
+        if (fantasma == fantasmaRosso) {
+            fantasma.setLayoutX(790);
+            fantasma.setLayoutY(460);
+            fantasma.setImage(new Image(getClass().getResourceAsStream("fantasma-rosso.gif")));
+        } else if (fantasma == fantasmaGiallo) {
+            fantasma.setLayoutX(750);
+            fantasma.setLayoutY(460);
+            fantasma.setImage(new Image(getClass().getResourceAsStream("fantasma-giallo.gif")));
+        } else if (fantasma == fantasmaRosa) {
+            fantasma.setLayoutX(830);
+            fantasma.setLayoutY(460);
+            fantasma.setImage(new Image(getClass().getResourceAsStream("fantasma-rosa.gif")));
+        } else if (fantasma == fantasmaAzzurro) {
+            fantasma.setLayoutX(870);
+            fantasma.setLayoutY(460);
+            fantasma.setImage(new Image(getClass().getResourceAsStream("fantasma-Azzurro.gif")));
+        }
+        fantasma.setDirezione("");
+    }
+
+
     private void fermaGioco(Stage primaryStage) {
+        timerGioco.stop();
+        if (timerPowerUp != null) timerPowerUp.stop();
         primaryStage.setScene(scenaGameOver); 
     }
 
+    private void attivaPowerUp() {
+        powerUpAttivo = true;
+        punteggio+=5;
+        lPunteggio.setText("Punteggio: "+ punteggio);
+        powerUpStartTime = System.nanoTime();
+        fantasmaRosso.setImage(fantasmaImpaurito);
+        fantasmaGiallo.setImage(fantasmaImpaurito);
+        fantasmaRosa.setImage(fantasmaImpaurito);
+        fantasmaAzzurro.setImage(fantasmaImpaurito);
+        timerPowerUp.start();
+    }
+
+    private void disattivaPowerUp() {
+        powerUpAttivo = false;
+        fantasmaRosso.setImage(new Image(getClass().getResourceAsStream("fantasma-rosso.gif")));
+        fantasmaGiallo.setImage(new Image(getClass().getResourceAsStream("fantasma-giallo.gif")));
+        fantasmaRosa.setImage(new Image(getClass().getResourceAsStream("fantasma-rosa.gif")));
+        fantasmaAzzurro.setImage(new Image(getClass().getResourceAsStream("fantasma-Azzurro.gif")));
+    }
+    
     public static void main(String[] args) {
         launch(args);
     }
