@@ -11,8 +11,8 @@ public class Fantasma extends ImageView {
     private Gioco gioco;
     int rigaFantasma; 
     int colonnaFantasma; 
-    private Image immagineOriginale; // Aggiunta per l'immagine originale
-    private String coloreFantasma; // Aggiunto per tracciare il colore
+    private Image immagine; 
+    private String coloreFantasma; 
 
     public Fantasma(Image image, double startX, double startY, Gioco gioco, String colore) { // Aggiunto parametro colore
         super(image);
@@ -21,8 +21,7 @@ public class Fantasma extends ImageView {
         this.setFitHeight(35);
         setLayoutX(startX);
         setLayoutY(startY);
-        this.immagineOriginale = image; // Salva l'immagine originale
-        this.coloreFantasma = colore; // Salva il colore del fantasma
+        this.immagine = image; 
     }
 
     public void setDirezione(String direzione) {
@@ -37,10 +36,6 @@ public class Fantasma extends ImageView {
         return colonnaFantasma;
     }
     
-    public Image getImmagineOriginale() {
-        return immagineOriginale;
-    }
-
     public String getColoreFantasma() {
         return coloreFantasma;
     }

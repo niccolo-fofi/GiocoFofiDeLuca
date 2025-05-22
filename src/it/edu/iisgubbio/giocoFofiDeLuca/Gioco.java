@@ -37,8 +37,7 @@ public class Gioco extends Application {
     Image angoloTDestra = new Image(getClass().getResourceAsStream("AngoloTDestro.png"));
     Image angoloTSinistra = new Image(getClass().getResourceAsStream("AngoloTSinistro.png"));
     Image lineabluorizontale = new Image(getClass().getResourceAsStream("lineaAzzurra.png"));
-    Image lineabluverticale = new Image(getClass().getResourceAsStream("lineaAzzurra.png"));
-    Image pallinoGrande = new Image(getClass().getResourceAsStream("lineaAzzurra.png"));
+    Image pallinoGrande = new Image(getClass().getResourceAsStream("pallinoGrande.jpg"));
     Image fantasmaImpaurito = new Image(getClass().getResourceAsStream("fantasmaImpaurito2.gif"));
 
     Pacman pacman;
@@ -50,7 +49,7 @@ public class Gioco extends Application {
     char mappaCaratteri[][]=new char[larghezzaMappa][altezzaMappa];
     int punteggio=0;
     Label lPunteggio = new Label("punteggio: " +punteggio);
-    Label lVite = new Label("vite:" + vite);
+    Label lVite = new Label("vite: " + vite);
     GridPane g;
     Pane stratoPersonaggi;
     Fantasma fantasmaRosso;
@@ -60,14 +59,16 @@ public class Gioco extends Application {
     StackPane strati;
     Scene giocoScena; 
     
-    Image immagineVittoria = new Image(getClass().getResourceAsStream("haiVinto.png"));
+    Image immagineVittoria = new Image(getClass().getResourceAsStream("sfondoVittoria.jpeg"));
     Scene scenaVittoria; 
     AnimationTimer timerGioco; 
 
-    Image immagineGameOver = new Image(getClass().getResourceAsStream("haiPerso.jpeg"));
+    Image immagineGameOver = new Image(getClass().getResourceAsStream("gameOver.jpeg"));
     Scene scenaGameOver;
 
     private MediaPlayer canzoneIntro;
+    MediaPlayer canzoneSconfitta;
+    MediaPlayer canzoneVittoria;
 
     private boolean powerUpAttivo = false;
     private AnimationTimer timerPowerUp;
@@ -93,12 +94,24 @@ public class Gioco extends Application {
     	lVite.setTranslateX(-10); // 
     	lVite.setTranslateY(10);
 
-    	String canzone = getClass().getResource("ZISO - Street Wisdom.mp3").toExternalForm();
-        Media media = new Media(canzone);
-        canzoneIntro = new MediaPlayer(media);
+    	String canzone1 = getClass().getResource("ZISO - Street Wisdom.mp3").toExternalForm();
+        Media media1 = new Media(canzone1);
+        canzoneIntro = new MediaPlayer(media1);
+        
+    	String canzone2 = getClass().getResource("suonoVittoria.mp3").toExternalForm();
+        Media media2 = new Media(canzone2);
+        canzoneVittoria = new MediaPlayer(media2);
+        
+    	String canzone3 = getClass().getResource("suonoSconfitta.mp3").toExternalForm();
+        Media media3 = new Media(canzone3);
+        canzoneSconfitta = new MediaPlayer(media3);
 
-        canzoneIntro.setVolume(0.05); 
+        canzoneIntro.setVolume(0.1); 
         canzoneIntro.setCycleCount(MediaPlayer.INDEFINITE);
+        canzoneVittoria.setVolume(0.15); 
+        canzoneVittoria.setCycleCount(MediaPlayer.INDEFINITE);
+        canzoneSconfitta.setVolume(0.2); 
+        canzoneSconfitta.setCycleCount(MediaPlayer.INDEFINITE);
 
         canzoneIntro.play();
 
@@ -136,11 +149,11 @@ public class Gioco extends Application {
         g = new GridPane();
         stratoPersonaggi = new Pane();
         fantasmaRosso = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-rosso.gif")), 790, 460, this, "rosso"); 
-        fantasmaGiallo = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-giallo.gif")), 750, 460, this, "giallo"); 
+        fantasmaGiallo = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-giallo.gif")), 800, 460, this, "giallo"); 
         fantasmaRosa = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-rosa.gif")), 830, 460, this, "rosa");
         fantasmaAzzurro = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-Azzurro.gif")), 870, 460, this, "azzurro"); 
         
-        pacman = new Pacman(new Image(getClass().getResourceAsStream("pacman.gif")), 32, 50, this);
+        pacman = new Pacman(new Image(getClass().getResourceAsStream("pacman.gif")), 720, 50, this);
         
         stratoPersonaggi.getChildren().add(pacman);
         stratoPersonaggi.getChildren().add(fantasmaRosso);
@@ -254,7 +267,6 @@ public class Gioco extends Application {
                         case "aTD": img = angoloTDestra; break;
                         case "aSB": img = angoloSinistroBasso; break;
                         case "l": img = lineabluorizontale; break;
-                        case "x": img = lineabluverticale; break;
                         case "z": img = pallinoGrande; break;
 
                     }
@@ -311,9 +323,10 @@ public class Gioco extends Application {
     
     public void haiVinto(Stage primaryStage) {
         if(punteggio >= 2860) { 
-            primaryStage.setScene(scenaVittoria); 
+            primaryStage.setScene(scenaVittoria);
             timerGioco.stop();
-            if (timerPowerUp != null) timerPowerUp.stop(); 
+            canzoneVittoria.play();
+            if (timerPowerUp != null) timerPowerUp.stop();
         }
     }
 
@@ -330,7 +343,7 @@ public class Gioco extends Application {
                 	if(vite>1) {
                 		vite--;
                 		lVite.setText("vite: "+vite);
-                		pacman.setLayoutX(50);
+                		pacman.setLayoutX(720);
                 		pacman.setLayoutY(50);
                         respawnFantasma(fantasma);
                 	}else {
@@ -344,20 +357,20 @@ public class Gioco extends Application {
 
     private void respawnFantasma(Fantasma fantasma) {
         if (fantasma == fantasmaRosso) {
-            fantasma.setLayoutX(790);
-            fantasma.setLayoutY(460);
+        	fantasma.setLayoutX(770); 
+        	fantasma.setLayoutY(460);
             fantasma.setImage(new Image(getClass().getResourceAsStream("fantasma-rosso.gif")));
         } else if (fantasma == fantasmaGiallo) {
-            fantasma.setLayoutX(750);
-            fantasma.setLayoutY(460);
+        	fantasma.setLayoutX(770); 
+        	fantasma.setLayoutY(460);
             fantasma.setImage(new Image(getClass().getResourceAsStream("fantasma-giallo.gif")));
         } else if (fantasma == fantasmaRosa) {
-            fantasma.setLayoutX(830);
-            fantasma.setLayoutY(460);
+        	fantasma.setLayoutX(770); 
+        	fantasma.setLayoutY(460);
             fantasma.setImage(new Image(getClass().getResourceAsStream("fantasma-rosa.gif")));
         } else if (fantasma == fantasmaAzzurro) {
-            fantasma.setLayoutX(870);
-            fantasma.setLayoutY(460);
+        	fantasma.setLayoutX(770); 
+        	fantasma.setLayoutY(460);
             fantasma.setImage(new Image(getClass().getResourceAsStream("fantasma-Azzurro.gif")));
         }
         fantasma.setDirezione("");
@@ -367,6 +380,7 @@ public class Gioco extends Application {
     private void fermaGioco(Stage primaryStage) {
         timerGioco.stop();
         if (timerPowerUp != null) timerPowerUp.stop();
+        canzoneSconfitta.play();
         primaryStage.setScene(scenaGameOver); 
     }
 
