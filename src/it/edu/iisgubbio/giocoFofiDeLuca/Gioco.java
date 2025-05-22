@@ -40,13 +40,12 @@ public class Gioco extends Application {
     Pacman pacman;
     double pacmanX;
     double pacmanY;
-
     int altezzaMappa = 32;
     int larghezzaMappa = 52;
+    int vite=3;
     char mappaCaratteri[][]=new char[larghezzaMappa][altezzaMappa];
     int punteggio=0;
     Label lPunteggio = new Label(punteggio+"");
-
     GridPane g;
     Pane stratoPersonaggi;
     Fantasma fantasmaRosso;
@@ -55,6 +54,13 @@ public class Gioco extends Application {
     Fantasma fantasmaAzzurro;
     StackPane strati;
     Scene giocoScena; 
+    
+    Image immagineVittoria = new Image(getClass().getResourceAsStream("haiVinto.png"));
+    Scene scenaVittoria; 
+    AnimationTimer timerGioco; 
+
+    Image immagineGameOver = new Image(getClass().getResourceAsStream("haiPerso.jpeg"));
+    Scene scenaGameOver;
 
     private MediaPlayer canzoneIntro;
 
@@ -65,26 +71,26 @@ public class Gioco extends Application {
     		    "-fx-font-weight: bold;" +
     		    "-fx-text-fill: WHITE;");
 
-    	String audioFilePath = getClass().getResource("ZISO - Street Wisdom.mp3").toExternalForm();
-        Media introMedia = new Media(audioFilePath);
-        canzoneIntro = new MediaPlayer(introMedia);
+    	String canzone = getClass().getResource("ZISO - Street Wisdom.mp3").toExternalForm();
+        Media media = new Media(canzone);
+        canzoneIntro = new MediaPlayer(media);
 
         canzoneIntro.setVolume(0.05); 
         canzoneIntro.setCycleCount(MediaPlayer.INDEFINITE);
 
         canzoneIntro.play();
 
-        Image backgroundImage = new Image(getClass().getResourceAsStream("sfondoPacman.jpeg"));
-        ImageView backgroundImageView = new ImageView(backgroundImage);
+        Image sfondo = new Image(getClass().getResourceAsStream("sfondoPacman.jpeg"));
+        ImageView imageViewSfdondo = new ImageView(sfondo);
 
-        backgroundImageView.setFitWidth(1650);
-        backgroundImageView.setFitHeight(1002);
+        imageViewSfdondo.setFitWidth(1650);
+        imageViewSfdondo.setFitHeight(1002);
 
-        VBox contentLayout = new VBox(20);
-        contentLayout.setAlignment(Pos.CENTER);
+        VBox vBOx = new VBox(20);
+        vBOx.setAlignment(Pos.CENTER);
 
-        Image pacmanIntroImage = new Image(getClass().getResourceAsStream("pacmanSfondo.gif"));
-        ImageView pacmanIntro = new ImageView(pacmanIntroImage);
+        Image pacmanIntroAnimata= new Image(getClass().getResourceAsStream("pacmanSfondo.gif"));
+        ImageView pacmanIntro = new ImageView(pacmanIntroAnimata);
         Image scrittaPacmanImage = new Image(getClass().getResourceAsStream("pacmanSfondo.png"));
         ImageView scrittaPacman = new ImageView(scrittaPacmanImage);
 
@@ -94,20 +100,18 @@ public class Gioco extends Application {
         start.setStyle("-fx-font-size: 30px; -fx-padding: 15 30 15 30; -fx-background-color: yellow; -fx-text-fill: black; -fx-font-weight: bold; -fx-border-radius: 5; -fx-background-radius: 5;");
         start.setStyle(start.getStyle() + "; -fx-border-color: blue; -fx-border-width: 3;");
 
-        contentLayout.getChildren().addAll(scrittaPacman,pacmanIntro,  start);
+        vBOx.getChildren().addAll(scrittaPacman,pacmanIntro,  start);
 
-        StackPane startScreenStack = new StackPane();
+        StackPane scenaIniziale = new StackPane();
 
-        startScreenStack.getChildren().addAll(backgroundImageView, contentLayout);
+        scenaIniziale.getChildren().addAll(imageViewSfdondo, vBOx);
 
-        Scene startScene = new Scene(startScreenStack, 1650, 1002);
+        Scene startScene = new Scene(scenaIniziale, 1650, 1002);
         primaryStage.setTitle("Pacman");
         primaryStage.setScene(startScene);
         primaryStage.show();
 
         g = new GridPane();
-        g.add(lPunteggio, 1, 0); 
-
         stratoPersonaggi = new Pane();
         fantasmaRosso = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-rosso.gif")), 790, 460, this);
         fantasmaGiallo = new Fantasma(new Image(getClass().getResourceAsStream("fantasma-giallo.gif")), 750, 460, this);
@@ -119,12 +123,24 @@ public class Gioco extends Application {
         stratoPersonaggi.getChildren().add(fantasmaRosa);
         stratoPersonaggi.getChildren().add(fantasmaGiallo);
         stratoPersonaggi.getChildren().add(fantasmaAzzurro);
-        strati = new StackPane(g, stratoPersonaggi); 
+        strati = new StackPane(g, stratoPersonaggi,lPunteggio); 
 
         mappa = new ImageView[larghezzaMappa][altezzaMappa];
         caricaMappa();
 
         giocoScena = new Scene(strati, 1650, 1002); 
+        
+        ImageView winImageView = new ImageView(immagineVittoria);
+        winImageView.setFitWidth(1650);
+        winImageView.setFitHeight(1002);
+        StackPane winRoot = new StackPane(winImageView);
+        scenaVittoria = new Scene(winRoot, 1650, 1002);
+
+        ImageView gameOverImageView = new ImageView(immagineGameOver);
+        gameOverImageView.setFitWidth(1650);
+        gameOverImageView.setFitHeight(1002);
+        StackPane gameOverRoot = new StackPane(gameOverImageView);
+        scenaGameOver = new Scene(gameOverRoot, 1650, 1002);
 
         giocoScena.setOnKeyPressed(event -> {
             switch (event.getCode()) {
@@ -143,7 +159,7 @@ public class Gioco extends Application {
             }
         });
 
-        AnimationTimer timer = new AnimationTimer() {
+        timerGioco = new AnimationTimer() { 
             @Override
             public void handle(long now) {
                 pacman.aggiornaPosizionePacman();
@@ -153,13 +169,16 @@ public class Gioco extends Application {
                 fantasmaAzzurro.aggiornaPosizioneFantasma();
                 pacmanX = pacman.getLayoutX();
                 pacmanY = pacman.getLayoutY();
+                
+                haiVinto(primaryStage); 
+                controllaCollisioneFantasmi(primaryStage);
             }
         };
 
         start.setOnAction(e -> {
         	canzoneIntro.stop();
             primaryStage.setScene(giocoScena); 
-            timer.start(); 
+            timerGioco.start(); 
             giocoScena.getRoot().requestFocus();
         });
     }
@@ -238,6 +257,39 @@ public class Gioco extends Application {
             return true;
         }
         return false;
+    }
+    
+    public void haiVinto(Stage primaryStage) {
+        if(punteggio >= 2860) {
+            primaryStage.setScene(scenaVittoria); 
+        }
+    }
+
+    private void controllaCollisioneFantasmi(Stage primaryStage) {
+        if (pacman.getColonnaPacman() == fantasmaRosso.getColonnaFantasma() && 
+            pacman.getRigaPacman() == fantasmaRosso.getRigaFantasma()) {
+            fermaGioco(primaryStage);
+            return;
+        }
+        if (pacman.getColonnaPacman() == fantasmaGiallo.getColonnaFantasma() && 
+            pacman.getRigaPacman() == fantasmaGiallo.getRigaFantasma()) {
+            fermaGioco(primaryStage);
+            return;
+        }
+        if (pacman.getColonnaPacman() == fantasmaRosa.getColonnaFantasma() && 
+            pacman.getRigaPacman() == fantasmaRosa.getRigaFantasma()) {
+            fermaGioco(primaryStage);
+            return;
+        }
+        if (pacman.getColonnaPacman() == fantasmaAzzurro.getColonnaFantasma() && 
+            pacman.getRigaPacman() == fantasmaAzzurro.getRigaFantasma()) {
+            fermaGioco(primaryStage);
+            return;
+        }
+    }
+
+    private void fermaGioco(Stage primaryStage) {
+        primaryStage.setScene(scenaGameOver); 
     }
 
     public static void main(String[] args) {

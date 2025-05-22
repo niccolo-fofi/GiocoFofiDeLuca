@@ -36,7 +36,23 @@ public class Pacman extends ImageView {
 		return direzione;
 	}
 
-    public void aggiornaPosizionePacman() {
+    public int getRigaPacman() {
+		return rigaPacman;
+	}
+
+	public void setRigaPacman(int rigaPacman) {
+		this.rigaPacman = rigaPacman;
+	}
+
+	public int getColonnaPacman() {
+		return colonnaPacman;
+	}
+
+	public void setColonnaPacman(int colonnaPacman) {
+		this.colonnaPacman = colonnaPacman;
+	}
+
+	public void aggiornaPosizionePacman() {
         double x = getLayoutX();
         double y = getLayoutY();
 

@@ -9,6 +9,8 @@ public class Fantasma extends ImageView {
     private double velocita = 1.5;
     private String direzione = ""; 
     private Gioco gioco;
+    int rigaFantasma; // Aggiunta per tracciare la riga del fantasma
+    int colonnaFantasma; // Aggiunta per tracciare la colonna del fantasma
 
     public Fantasma(Image image, double startX, double startY, Gioco gioco) {
         super(image);
@@ -23,12 +25,22 @@ public class Fantasma extends ImageView {
         this.direzione = direzione;
     }
 
+    // Metodo per ottenere la riga attuale del fantasma
+    public int getRigaFantasma() {
+        return rigaFantasma;
+    }
+
+    // Metodo per ottenere la colonna attuale del fantasma
+    public int getColonnaFantasma() {
+        return colonnaFantasma;
+    }
+
     public void aggiornaPosizioneFantasma() {
         double x = getLayoutX();
         double y = getLayoutY();
 
-        int colonnaFantasma = (int) Math.round(x / 32.0); 
-        int rigaFantasma = (int) Math.round(y / 32.0);
+        colonnaFantasma = (int) Math.round(x / 32.0); 
+        rigaFantasma = (int) Math.round(y / 32.0);
 
         int colonnaPacman = (int) Math.round(gioco.pacmanX / 32.0); 
         int rigaPacman = (int) Math.round(gioco.pacmanY / 32.0); 
