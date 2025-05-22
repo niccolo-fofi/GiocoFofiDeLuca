@@ -38,6 +38,9 @@ public class Gioco extends Application {
     Image angoloTSinistra = new Image(getClass().getResourceAsStream("AngoloTSinistro.png"));
     Image lineabluorizontale = new Image(getClass().getResourceAsStream("LineaBluOrizontale.png"));
     Image lineabluverticale = new Image(getClass().getResourceAsStream("LineaBluVerticale.png"));
+    Image pallinoGrande = new Image(getClass().getResourceAsStream("pallinoGrande.png"));
+    Image fanstasmaImpaurito = new Image(getClass().getResourceAsStream("fantasmaImpaurito.png"));
+
     Pacman pacman;
     double pacmanX;
     double pacmanY;
@@ -216,6 +219,8 @@ public class Gioco extends Application {
                         case "aSB": img = angoloSinistroBasso; break;
                         case "bo": img = lineabluorizontale; break;
                         case "bv": img = lineabluverticale; break;
+                        case "pG": img = pallinoGrande; break;
+
                     }
 
                     ImageView immagine = new ImageView(img);
@@ -237,14 +242,15 @@ public class Gioco extends Application {
         if (x < 0 || x >= larghezzaMappa || y < 0 || y >= altezzaMappa) {
             return false;
         }
-        return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p');
+        return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p' || mappaCaratteri[x][y] == 'pG');
     }
 
     public boolean calpestabileFantasma(int x, int y) {
         if (x < 0 || x >= larghezzaMappa || y < 0 || y >= altezzaMappa) {
             return false;
         }
-        return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p' || mappaCaratteri[x][y] == 'b');
+        return (mappaCaratteri[x][y] == 's' || mappaCaratteri[x][y] == 'p' || mappaCaratteri[x][y] == 'bo'
+        		|| mappaCaratteri[x][y] == 'bv' || mappaCaratteri[x][y] == 'pG');
     }
 
     public void raccogliPuntino(int x, int y) {
